@@ -1,0 +1,31 @@
+---
+title: "Proposal for Capstone Project"
+author: "sasiratkitt"
+date: "August 19, 2018"
+output: html_document
+---
+
+**Title:** Repeated Buyers Prediction
+
+**Problem:** Merchants sometimes run big promotions (e.g., discounts or cash coupons) on particular dates (e.g., Boxing-day Sales, "Black Friday" or "Double 11" (Nov 11th), in order to attract a large number of new buyers. Unfortunately, many of the attracted buyers are one-time deal hunters, and these promotions may have little long lasting impact on sales. To alleviate this problem, it is important for merchants to identify who can be converted into repeated buyers. By targeting on these potential loyal customers, merchants can greatly reduce the promotion cost and enhance the return on investment (ROI). Thus the task is to predict the probability that these new buyers would purchase items from the same merchants again within 6 months.
+
+**Who might care:** Online advetisers and marketers of e-commerce websites such as amazon.com, lazada.com, gap.com, wayfair.com, etc.can use such a model to enhance their customer targeting strategy and tactics. It is well known that in the field of online advertising, customer targeting is extremely challenging, especially for fresh buyers. However, with the long-term user behavior log accumulated by Tmall.com, we may be able to solve this problem. This is a win-win-win scenario for the online platform, merchants and loyal customers.
+
+**Data**: Datasets are obtained from Tianchi website (Alibaba Cloud) [link](https://tianchi.aliyun.com/competition/introduction.htm?raceId=231576), which is running the Repeated Buyers Prediction Challenge. The data sets contain anonymized users' shopping logs in the past 6 months before and on the "Double 11" day, and the label information indicating whether they are repeated buyers of the given merchants. Activity logs include click, add-to-cart, purchase and add-to-favorite for items under different product categories and brands.
+
+**Modeling approach:** To predict which new buyers for given merchants will become loyal customers in the future, supervised classification algorithm will be used. This can comprise of multiple modeling techniques such as logistic regression, random forest, or extreme gradient boosting to form a powerful ensemble. At this initial stage, what makes this task challenging can be 1) the specific 6-month purchase prediction timeframe and 2) detecting patterns/segments among customer profiles and behaviours. The latter, segmentation technique such as K-mean could be used to discover these patterns more clearly.
+
+**Possible limitation:** The datasets are relatively large in size (>300M). Although, they still can be loaded into R, given 8GM RAM memory machine, realistically this can post as a computational challenge. On the other hand, it presents an opportunity for me to explore various ways to handle large datasets effectively from data loading to data wrangling to data modeling.
+
+**Deliverables:**
+
+1. Codes (R markdowns/ notebooks)
+  + data cleaning/wrangling
+  + data exploratory analysis
+  + machine learning model development
+  
+2. Report on Capstone project
+3. Presentation on Capstone project
+
+
+*Note:* Problem statement section is taken directly as appeared on Tianchi website [link](https://tianchi.aliyun.com/competition/introduction.htm?raceId=231576)
