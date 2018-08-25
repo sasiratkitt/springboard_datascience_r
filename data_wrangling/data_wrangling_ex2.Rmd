@@ -1,0 +1,90 @@
+---
+title: "data wrangling ex2"
+author: "sasiratkitt"
+date: "August 25, 2018"
+output: html_document
+---
+
+```{r load package, message = FALSE}
+library(tidyverse)
+library(dummies)
+library(funModeling)
+library(mice)
+library(Hmisc)
+```
+
+### 0: Load the data in RStudio
+After loading the dataset, I tried applying different techniques to identify missing values, which includes "" and NA values.
+
+```{r load data, echo= TRUE}
+setwd("~/R Projects/springboard_datascience_r/data_wrangling")
+titanic0 <- read.csv("titanic3_original.csv", na.strings = TRUE, stringsAsFactors = FALSE)
+tbl_df(titanic0)
+
+#Checking NA, zeros, data type and unique values with various functions. However, this function fails to detect "" values.
+my_data_status <- funModeling::df_status(titanic0)
+
+#colSums function can also be used in this case
+colSums(is.na(titanic0))
+
+colSums(titanic0 == "")
+
+#Subseting
+#test <- titanic0[titanic0$embarked == "C",]
+#count(titanic0[titanic0$embarked == "C",])
+```
+
+### 1: Port of embarkation
+```{r embarked}
+titanic <- titanic0
+titanic <- titanic %>% mutate(embarked = ifelse(embarked == "", "S", embarked))
+
+#Question: How do we write lapply code for this case
+#titanic$embarked<- lapply(titanic$embarked, replace(titanic$embarked, "", "S"))
+```
+
+### 2: Age
+To replace missing 'age' values, we can use mean or median as a simplified method. We also cross-checked at how average age varies by passenger gender and observe distribution of age range
+
+```{r age}
+#replace missing 'age' with mean or median of data rows without NA
+mean(titanic$age, na.rm = TRUE)
+median(titanic$age, na.rm = TRUE)
+
+titanic <- titanic %>% mutate(age = ifelse(is.na(age) | age == "" , mean(titanic$age, na.rm = TRUE), age))
+
+#titanic$age <- impute(titanic$age, mean)
+
+#exploring further, we look at how average age varies by passenger gender and observe distribution of age range.
+hist(titanic0$age[titanic0$sex == "female"])
+mean(titanic0$age[titanic0$sex == "female"], na.rm = TRUE)
+
+hist(titanic0$age[titanic0$sex == "male"])
+mean(titanic0$age[titanic0$sex == "male"], na.rm = TRUE)
+```
+Since there is not much difference in female vs. male average age or age distribution, average value of all passengers will be used.
+
+
+### 3: Lifeboat
+```{r lifeboat}
+titanic$boat[titanic$boat == ""] <- NA
+
+#Check that titanic$boat's missing values are replaced with NA
+colSums(titanic == "")
+```
+
+### 4: Cabin
+```{r cabin}
+#77% of cabin information is missing. So it may not make sense to fill in the missing values
+titanic <- titanic %>% mutate(has_cabin_number = ifelse(cabin == "", 0, 1))
+
+#test correlation between passenger survival to cabin number ownership
+cor(titanic$survived[!is.na(titanic$survived)], titanic$has_cabin_number[!is.na(titanic$survived)])
+```
+
+### 5: Submit the project on Github
+```{r write}
+write.csv(titanic, "titanic_clean.csv", row.names = FALSE)
+```
+
+
