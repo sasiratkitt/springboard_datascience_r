@@ -1,20 +1,24 @@
 ---
-title: "data wrangling ex1"
+title: "data wrangling ex1: basic data manipulation"
 author: "sasiratkitt"
 date: "August 22, 2018"
 output: html_document
 ---
 
-```{r load package}
-library(dplyr)
+```{r load package, message = FALSE}
+library(tidyverse)
+library(dummies)
 ```
 
-
-```{r load data, include=FALSE}
+### 0: Load the data in RStudio
+```{r load data, echo= TRUE}
 setwd("~/R Projects/springboard_datascience_r/data_wrangling")
-refine <- read.csv("refine_original.csv", stringsAsFactors = FALSE)
+refine0 <- read.csv("refine_original.csv", stringsAsFactors = FALSE)
+tbl_df(refine0)
 ```
 
+
+### 1: Clean up brand names
 ```{r clean up brand names}
 refine <- refine0 
 refine$company <- tolower(refine0$company)
@@ -31,10 +35,14 @@ refine <- rename(refine, company = correction)
 
 ```
 
+
+### 2: Separate product code and number
 ```{r separate string}
 refine <- refine %>% separate(Product.code...number,into = c("product_code","product_name"),sep = "-")
 ```
 
+
+### 3: Add product categories
 ```{r product category mapping}
 product_code <- c("p","v","x", "q")
 product_category <-  c("Smartphone", "TV", "Laptop", "Tablet")
@@ -43,10 +51,14 @@ category <- data_frame(product_code, product_category)
 refine <- refine %>% left_join(category, by = "product_code")
 ```
 
+
+### 4: Add full address for geocoding
 ```{r address}
 refine$full_address <- paste(refine$address, refine$city, refine$country, sep = ",")
 ```
 
+
+### 5: Create dummy variables for company and product category
 ```{r dummy}
 
 dummy_company <- dummy(refine$company)
@@ -55,6 +67,8 @@ dummy_product <- dummy(refine$product_category)
 refine <- cbind(refine,dummy_company, dummy_product)
 ```
 
+
+### 6: Submit the project on Github
 ```{r write}
 write.csv(refine,"refine_clean.csv", row.names = FALSE)
 ```
