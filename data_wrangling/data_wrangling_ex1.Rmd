@@ -12,7 +12,7 @@ library(dplyr)
 
 ```{r load data, include=FALSE}
 setwd("~/R Projects/springboard_datascience_r/data_wrangling")
-refine <- read.csv("refine.csv", stringsAsFactors = FALSE)
+refine <- read.csv("refine_original.csv", stringsAsFactors = FALSE)
 ```
 
 ```{r clean up brand names}
